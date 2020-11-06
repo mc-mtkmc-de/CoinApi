@@ -58,18 +58,18 @@ public class CoinAPI implements Economy{
 
 	@Override
 	public boolean createPlayerAccount(OfflinePlayer arg0) {
-		createPlayerAccount(arg0.getName());
 		try
-		{
-			//PreparedStatement st = MySQL.con.prepareStatement("SELECT coins FROM coinTable WHERE UUID = ?");		
-			if(true)//TODO: hasAccount? oder ähnliches benutzen
+		{	
+			if(!hasAccount(arg0))
 			{
 				PreparedStatement st = MySQL.con.prepareStatement("INSERT INTO coinTable(UUID, coins) VALUES (?,?);");		
 				st.setString(1, arg0.getUniqueId().toString());
 				st.setDouble(2, 1000);
 				st.executeUpdate();
 				return true;
-			}			
+			}else {
+				return true;
+			}
 		}catch(SQLException e) 
 		{			
 			e.printStackTrace();			

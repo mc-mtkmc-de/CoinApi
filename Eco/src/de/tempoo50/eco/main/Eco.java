@@ -1,5 +1,8 @@
 package de.tempoo50.eco.main;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.tempoo50.eco.commands.EcoCommand;
@@ -9,7 +12,7 @@ import de.tempoo50.eco.commands.SetCommand;
 import de.tempoo50.eco.mysql.MySQL;
 import de.tempoo50.eco.utils.CoinAPI;
 
-public class Eco extends JavaPlugin {
+public class Eco extends JavaPlugin implements Listener {
 	
 	private static Eco plugin;
 	public CoinAPI econ = null;
@@ -37,5 +40,10 @@ public class Eco extends JavaPlugin {
 	
 	public static Eco getPlugin() {
 		return plugin;
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		econ.createPlayerAccount(event.getPlayer());
 	}
 }
