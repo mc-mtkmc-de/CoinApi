@@ -120,7 +120,7 @@ public class CoinAPI implements Economy{
 			PreparedStatement st = MySQL.con.prepareStatement("UPDATE coinTable SET coins = ? WHERE UUID = ?");
 			st.setDouble(1, amount);
 			st.setString(2, arg0.getUniqueId().toString());
-			st.executeQuery();
+			st.executeUpdate();
 			result = new EconomyResponse(arg1, amount, ResponseType.SUCCESS, "");
 		}catch(SQLException e) 
 		{			
@@ -304,7 +304,7 @@ public class CoinAPI implements Economy{
 			PreparedStatement st = MySQL.con.prepareStatement("UPDATE coinTable SET coins = ? WHERE UUID = ?");
 			st.setDouble(1, amount);
 			st.setString(2, arg0.getUniqueId().toString());
-			st.executeQuery();
+			st.executeUpdate();
 			result = new EconomyResponse(arg1, amount, ResponseType.SUCCESS, "");
 		}catch(SQLException e) 
 		{			

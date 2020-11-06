@@ -56,7 +56,7 @@ public class MySQL {
 		
 		try {
 			
-			con.prepareStatement("CREATE TABLE IF NOT EXISTS coinTable (UUID VARCHAR(100), coins INT(16))").executeUpdate();
+			con.prepareStatement("CREATE TABLE IF NOT EXISTS coinTable (UUID VARCHAR(100), coins DOUBLE(16))").executeUpdate();
 			
 		}catch(SQLException e) {
 			
