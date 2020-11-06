@@ -23,11 +23,13 @@ public class SetCommand implements CommandExecutor {
 			if(args.length == 2) {
 				
 				Player target = Bukkit.getPlayer(args[0]);
-				Integer amount = Integer.valueOf(args[1]);
+				Integer setAmount = Integer.valueOf(args[1]);
 				
 				if(target != null) {
 					
-					CoinAPI.setCoins(target.getName(), amount);
+					double amount = plugin.econ.getBalance(target);
+					plugin.econ.withdrawPlayer(target, amount);
+					plugin.econ.depositPlayer(target, setAmount);
 					
 					player.sendMessage("Du hast " + target.getName() + " " + amount + " gegeben!");
 					target.sendMessage("Du hast " + amount + " vom Server erhalten!");

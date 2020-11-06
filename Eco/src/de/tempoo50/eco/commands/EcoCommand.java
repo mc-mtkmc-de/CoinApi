@@ -19,10 +19,8 @@ public class EcoCommand implements CommandExecutor{
 			
 			Player player = (Player) sender;
 			
-			if(args.length == 0) {
-				
-				player.sendMessage("Dein Kontostand beträgt " + CoinAPI.getCoins(player.getName()));
-				
+			if(args.length == 0) {				
+				player.sendMessage("Dein Kontostand beträgt " + plugin.econ.getBalance(player.getName()));				
 			}
 			
 		}

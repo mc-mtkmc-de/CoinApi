@@ -27,8 +27,8 @@ public class PayCommand implements CommandExecutor {
 				
 				if(target != null) {
 					
-					CoinAPI.addCoins(target.getName(), amount);
-					CoinAPI.removeCoins(player.getName(), amount);
+					plugin.econ.depositPlayer(target.getName(), amount);
+					plugin.econ.withdrawPlayer(player.getName(), amount);
 					
 					player.sendMessage("Du hast " + target.getName() + " einen betrag von " + amount + " bezahlt!");
 					target.sendMessage(player.getName() + " hat dir " + amount + " bezahlt!");

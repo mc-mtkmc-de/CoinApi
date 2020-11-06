@@ -7,17 +7,17 @@ import de.tempoo50.eco.commands.PayAllCommand;
 import de.tempoo50.eco.commands.PayCommand;
 import de.tempoo50.eco.commands.SetCommand;
 import de.tempoo50.eco.mysql.MySQL;
+import de.tempoo50.eco.utils.CoinAPI;
 
 public class Eco extends JavaPlugin {
 	
 	private static Eco plugin;
-	public static MyEconomy econ = null;
+	public CoinAPI econ = null;
 	private VaultHook vaulthook;
 	
 	public void onEnable() {
-		
 		plugin = this;
-		econ = new MyEconomy();
+		econ = new CoinAPI();
 		vaulthook = new VaultHook();
 		vaulthook.hook();
 		

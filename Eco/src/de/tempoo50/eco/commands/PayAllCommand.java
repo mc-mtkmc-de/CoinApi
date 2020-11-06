@@ -22,7 +22,7 @@ public class PayAllCommand implements CommandExecutor {
 			
 			for(Player all : Bukkit.getOnlinePlayers()) {
 				
-				CoinAPI.addCoins(all.getName(), amount);
+				plugin.econ.depositPlayer(all.getName(), amount);
 				
 				all.sendMessage("Du hast " + amount + " erhalten");
 				
