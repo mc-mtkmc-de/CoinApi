@@ -7,17 +7,19 @@ import de.tempoo50.eco.commands.PayAllCommand;
 import de.tempoo50.eco.commands.PayCommand;
 import de.tempoo50.eco.commands.SetCommand;
 import de.tempoo50.eco.mysql.MySQL;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Eco extends JavaPlugin {
 	
-	private Eco plugin;
-	public static Economy econ = null;
+	private static Eco plugin;
+	public static MyEconomy econ = null;
+	private VaultHook vaulthook;
 	
 	public void onEnable() {
 		
 		plugin = this;
+		econ = new MyEconomy();
+		vaulthook = new VaultHook();
+		vaulthook.hook();
 		
 		MySQL.connect();
 		MySQL.createTable();
@@ -25,27 +27,15 @@ public class Eco extends JavaPlugin {
 		getCommand("eco").setExecutor(new EcoCommand());
 		getCommand("pay").setExecutor(new PayCommand());
 		getCommand("set").setExecutor(new SetCommand());
-		getCommand("payall").setExecutor(new PayAllCommand());
-		
-		setupEconomy();		
-		
+		getCommand("payall").setExecutor(new PayAllCommand());			
 	}
 
-	public void onDisable() {
-		
-		MySQL.disconnect();
-		
+	public void onDisable() {	
+		vaulthook.unhook();
+		MySQL.disconnect();	
 	}
 	
-	public Eco getPlugin() {
+	public static Eco getPlugin() {
 		return plugin;
-	}
-
-	private boolean setupEconomy() {
-		RegisteredServiceProvider<MyEconomy> economyProvider = getServer().getServicesManager().getRegistration(MyEconomy.class);
-		if (economyProvider != null) {
-			econ = economyProvider.getProvider(); }
-		 
-		return (econ != null);
 	}
 }
