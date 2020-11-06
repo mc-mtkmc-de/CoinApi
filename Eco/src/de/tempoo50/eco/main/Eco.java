@@ -8,6 +8,7 @@ import de.tempoo50.eco.commands.PayCommand;
 import de.tempoo50.eco.commands.SetCommand;
 import de.tempoo50.eco.mysql.MySQL;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Eco extends JavaPlugin {
 	
@@ -26,6 +27,8 @@ public class Eco extends JavaPlugin {
 		getCommand("set").setExecutor(new SetCommand());
 		getCommand("payall").setExecutor(new PayAllCommand());
 		
+		setupEconomy();		
+		
 	}
 
 	public void onDisable() {
@@ -38,4 +41,11 @@ public class Eco extends JavaPlugin {
 		return plugin;
 	}
 
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<MyEconomy> economyProvider = getServer().getServicesManager().getRegistration(MyEconomy.class);
+		if (economyProvider != null) {
+			econ = economyProvider.getProvider(); }
+		 
+		return (econ != null);
+	}
 }
