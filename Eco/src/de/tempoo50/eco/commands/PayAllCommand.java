@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.tempoo50.eco.main.Eco;
-import de.tempoo50.eco.utils.CoinAPI;
 
 public class PayAllCommand implements CommandExecutor {
 	
