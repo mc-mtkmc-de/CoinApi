@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -53,38 +54,48 @@ public class CoinAPI implements Economy{
 
 	@Override
 	public boolean createPlayerAccount(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		return createPlayerAccount(Bukkit.getPlayer(arg0));
 	}
 
 	@Override
 	public boolean createPlayerAccount(OfflinePlayer arg0) {
-		// TODO Auto-generated method stub
+		createPlayerAccount(arg0.getName());
+		try
+		{
+			//PreparedStatement st = MySQL.con.prepareStatement("SELECT coins FROM coinTable WHERE UUID = ?");		
+			if(true)//TODO: hasAccount? oder ähnliches benutzen
+			{
+				PreparedStatement st = MySQL.con.prepareStatement("INSERT INTO coinTable(UUID, coins) VALUES (?,?);");		
+				st.setString(1, arg0.getUniqueId().toString());
+				st.setDouble(2, 1000);
+				st.executeUpdate();
+				return true;
+			}			
+		}catch(SQLException e) 
+		{			
+			e.printStackTrace();			
+		}		
 		return false;
 	}
 
 	@Override
 	public boolean createPlayerAccount(String arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		return createPlayerAccount(Bukkit.getPlayer(arg0));
 	}
 
 	@Override
 	public boolean createPlayerAccount(OfflinePlayer arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		return createPlayerAccount(arg0);
 	}
 
 	@Override
 	public String currencyNamePlural() {
-		// TODO Auto-generated method stub
-		return null;
+		return "MTK-Dollar";
 	}
 
 	@Override
-	public String currencyNameSingular() {
-		// TODO Auto-generated method stub
-		return null;
+	public String currencyNameSingular() {		
+		return "MTK-Dollar";
 	}
 
 	@Override
@@ -119,32 +130,33 @@ public class CoinAPI implements Economy{
 
 	@Override
 	public String format(double arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return String.valueOf(arg0);
 	}
 
 	@Override
 	public int fractionalDigits() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getBalance(String arg0) {
-		try {
-			String uuid = Bukkit.getPlayer(arg0).getUniqueId().toString();
+		return getBalance(Bukkit.getPlayer(arg0));
+	}
+
+	@Override
+	public double getBalance(OfflinePlayer arg0) {
+		try
+		{
 			PreparedStatement st = MySQL.con.prepareStatement("SELECT coins FROM coinTable WHERE UUID = ?");
-			st.setString(1, uuid);
+			st.setString(1, arg0.getUniqueId().toString());
 			ResultSet rs = st.executeQuery();
 			
-			while(rs.next()) {
-				
-				return rs.getInt("coins"); 
-				
+			while(rs.next()) 
+			{				
+				return rs.getInt("coins"); 			
 			}
-			
-		}catch(SQLException e) {
-			
+		}catch(SQLException e) 
+		{			
 			e.printStackTrace();
 			
 		}	
@@ -152,86 +164,84 @@ public class CoinAPI implements Economy{
 	}
 
 	@Override
-	public double getBalance(OfflinePlayer arg0) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public double getBalance(String arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return 0;
+		return getBalance(Bukkit.getPlayer(arg0));
 	}
 
 	@Override
 	public double getBalance(OfflinePlayer arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return 0;
+		return getBalance(arg0);
 	}
 
 	@Override
 	public List<String> getBanks() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Economy Name?";
 	}
 
 	@Override
 	public boolean has(String arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		return has(Bukkit.getPlayer(arg0), arg1);
 	}
 
 	@Override
-	public boolean has(OfflinePlayer arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean has(OfflinePlayer arg0, double arg1) {		
+		return getBalance(arg0) >= arg1;
 	}
 
 	@Override
 	public boolean has(String arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return false;
+		return has(Bukkit.getPlayer(arg0), arg2);
 	}
 
 	@Override
 	public boolean has(OfflinePlayer arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return false;
+		return has(arg0, arg2);
 	}
 
 	@Override
 	public boolean hasAccount(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		return hasAccount(Bukkit.getPlayer(arg0));
 	}
 
 	@Override
 	public boolean hasAccount(OfflinePlayer arg0) {
-		// TODO Auto-generated method stub
+		try
+		{
+			PreparedStatement st = MySQL.con.prepareStatement("SELECT COUNT(*) FROM coinTable WHERE UUID = ?");
+			st.setString(1, arg0.getUniqueId().toString());
+			ResultSet rs = st.executeQuery();
+			
+			if(rs.next()) 
+			{				
+				int numberOfRows = rs.getInt(1);
+				if(numberOfRows >= 1)
+					return true;
+			}
+		}catch(SQLException e) 
+		{			
+			e.printStackTrace();			
+		}	
 		return false;
 	}
 
 	@Override
 	public boolean hasAccount(String arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		return hasAccount(Bukkit.getPlayer(arg0));
 	}
 
 	@Override
 	public boolean hasAccount(OfflinePlayer arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
+		return hasAccount(arg0);
 	}
 
 	@Override
 	public boolean hasBankSupport() {
-		return true;
+		return false;
 	}
 
 	@Override
