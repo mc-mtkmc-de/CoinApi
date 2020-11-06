@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.tempoo50.eco.main.Eco;
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
 public class PayAllCommand implements CommandExecutor {
 	
@@ -21,14 +22,11 @@ public class PayAllCommand implements CommandExecutor {
 			
 			for(Player all : Bukkit.getOnlinePlayers()) {
 				
-				plugin.econ.depositPlayer(all.getName(), amount);
-				
-				all.sendMessage("Du hast " + amount + " erhalten");
-				
-			}
-			
-		}
-		
+				if(plugin.econ.depositPlayer(all.getName(), amount).type == ResponseType.SUCCESS) {
+					all.sendMessage("Du hast " + amount + " erhalten");
+				}							
+			}			
+		}		
 		return false;
 	}
 

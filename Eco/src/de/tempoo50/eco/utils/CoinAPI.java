@@ -10,7 +10,7 @@ import org.bukkit.OfflinePlayer;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 import de.tempoo50.eco.mysql.MySQL;
 
 public class CoinAPI implements Economy{
@@ -105,26 +105,38 @@ public class CoinAPI implements Economy{
 
 	@Override
 	public EconomyResponse depositPlayer(String arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return depositPlayer(Bukkit.getPlayer(arg0), arg1);
 	}
 
 	@Override
 	public EconomyResponse depositPlayer(OfflinePlayer arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		EconomyResponse result = new EconomyResponse(arg1, -1, ResponseType.FAILURE, "Es gab einen unbekannten Fehler.");
+		try
+		{
+			if(!hasAccount(arg0)) {
+				return new EconomyResponse(arg1, -1, ResponseType.FAILURE, "Der Spieler hat keinen Account");
+			}
+			double amount = getBalance(arg0) + arg1;
+			PreparedStatement st = MySQL.con.prepareStatement("UPDATE coinTable SET coins = ? WHERE UUID = ?");
+			st.setDouble(1, amount);
+			st.setString(2, arg0.getUniqueId().toString());
+			st.executeQuery();
+			result = new EconomyResponse(arg1, amount, ResponseType.SUCCESS, "");
+		}catch(SQLException e) 
+		{			
+			e.printStackTrace();			
+		}	
+		return result;
 	}
 
 	@Override
 	public EconomyResponse depositPlayer(String arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return depositPlayer(Bukkit.getPlayer(arg0), arg2);
 	}
 
 	@Override
 	public EconomyResponse depositPlayer(OfflinePlayer arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return depositPlayer(arg0, arg2);
 	}
 
 	@Override
@@ -274,26 +286,41 @@ public class CoinAPI implements Economy{
 
 	@Override
 	public EconomyResponse withdrawPlayer(String arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		return withdrawPlayer(Bukkit.getPlayer(arg0), arg1);
 	}
 
 	@Override
 	public EconomyResponse withdrawPlayer(OfflinePlayer arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return null;
+		EconomyResponse result = new EconomyResponse(arg1, -1, ResponseType.FAILURE, "Es gab einen unbekannten Fehler.");
+		try
+		{
+			if(!hasAccount(arg0)) {
+				return new EconomyResponse(arg1, -1, ResponseType.FAILURE, "Der Spieler hat keinen Account");
+			}
+			if(!has(arg0, arg1)) {
+				return new EconomyResponse(arg1, -1, ResponseType.FAILURE, "Der Spieler hat nicht genügend " + currencyNameSingular());
+			}
+			double amount = getBalance(arg0) - arg1;
+			PreparedStatement st = MySQL.con.prepareStatement("UPDATE coinTable SET coins = ? WHERE UUID = ?");
+			st.setDouble(1, amount);
+			st.setString(2, arg0.getUniqueId().toString());
+			st.executeQuery();
+			result = new EconomyResponse(arg1, amount, ResponseType.SUCCESS, "");
+		}catch(SQLException e) 
+		{			
+			e.printStackTrace();			
+		}	
+		return result;
 	}
 
 	@Override
 	public EconomyResponse withdrawPlayer(String arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return withdrawPlayer(Bukkit.getPlayer(arg0), arg2);
 	}
 
 	@Override
 	public EconomyResponse withdrawPlayer(OfflinePlayer arg0, String arg1, double arg2) {
-		// TODO Auto-generated method stub
-		return null;
+		return withdrawPlayer(arg0, arg2);
 	}
 	
 }

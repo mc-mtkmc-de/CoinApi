@@ -40,7 +40,7 @@ public class PayCommand implements CommandExecutor {
 						plugin.econ.depositPlayer(target.getName(), amount);
 						plugin.econ.withdrawPlayer(player.getName(), amount);
 						
-						player.sendMessage("Du hast " + target.getName() + " einen betrag von " + amount + " bezahlt!");
+						player.sendMessage("Du hast " + target.getName() + " einen Betrag von " + amount + " bezahlt!");
 						target.sendMessage(player.getName() + " hat dir " + amount + " bezahlt!");
 					}
 				}

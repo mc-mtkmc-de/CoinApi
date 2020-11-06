@@ -17,8 +17,12 @@ public class EcoCommand implements CommandExecutor{
 		if(sender instanceof Player) {			
 			Player player = (Player) sender;
 			
-			if(args.length == 0) {				
-				player.sendMessage("Dein Kontostand beträgt " + plugin.econ.getBalance(player.getName()));				
+			if(args.length == 0) {
+				if(!plugin.econ.hasAccount(player)) {
+					player.sendMessage("Du hast kein Konto!");
+				}else {
+					player.sendMessage("Dein Kontostand beträgt " + plugin.econ.getBalance(player.getName()));
+				}				
 			}
 		}
 		

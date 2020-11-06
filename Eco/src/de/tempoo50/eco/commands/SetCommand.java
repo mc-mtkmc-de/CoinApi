@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.tempoo50.eco.main.Eco;
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
 public class SetCommand implements CommandExecutor {
 	
@@ -27,18 +28,19 @@ public class SetCommand implements CommandExecutor {
 				if(target != null) {
 					
 					double amount = plugin.econ.getBalance(target);
-					plugin.econ.withdrawPlayer(target, amount);
-					plugin.econ.depositPlayer(target, setAmount);
-					
-					player.sendMessage("Du hast " + target.getName() + " " + amount + " gegeben!");
-					target.sendMessage("Du hast " + amount + " vom Server erhalten!");
-					
-				}
-				
-			}
+					var result = plugin.econ.withdrawPlayer(target, amount);
+					if(result.type == ResponseType.SUCCESS) {
+						plugin.econ.depositPlayer(target, setAmount);
+						
+						player.sendMessage("Du hast " + target.getName() + " " + setAmount + " gegeben!");
+						target.sendMessage("Du hast " + setAmount + " vom Server erhalten!");		
+					}else {
+						player.sendMessage(result.errorMessage);
+					}
 			
-		}
-		
+				}			
+			}			
+		}		
 		return false;
 	}
 
