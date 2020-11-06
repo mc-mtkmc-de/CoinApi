@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.tempoo50.eco.main.Eco;
+import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
 public class SetCommand implements CommandExecutor {
@@ -28,7 +29,7 @@ public class SetCommand implements CommandExecutor {
 				if(target != null) {
 					
 					double amount = plugin.econ.getBalance(target);
-					var result = plugin.econ.withdrawPlayer(target, amount);
+					EconomyResponse result = plugin.econ.withdrawPlayer(target, amount);
 					if(result.type == ResponseType.SUCCESS) {
 						plugin.econ.depositPlayer(target, setAmount);
 						
